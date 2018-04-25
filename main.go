@@ -9,6 +9,8 @@ import (
 
 	"time"
 
+	"fmt"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -16,6 +18,9 @@ import (
 	"github.com/aws/aws-sdk-go/service/route53"
 	"github.com/fapiko/route53-dynamic-dns/ip"
 )
+
+var firstRun = true
+var oldIP = ""
 
 func main() {
 	config, err := parseConfig()
@@ -35,19 +40,38 @@ func main() {
 	svc := route53.New(sess)
 
 	for true {
+		// Stick this up here so that if we error out grabbing the external IP or hitting AWS we don't constantly spam
+		// either of those services. Don't sleep for the first run so we can immediately try to update on startup.
+		if !firstRun {
+			time.Sleep(300 * time.Second)
+			firstRun = false
+		}
+
 		externalAddr, err := ip.External()
 		if err != nil {
 			log.Error(err)
-			os.Exit(1)
+			continue
 		}
 
-		err = upsertARecord(svc, config.Hostname, externalAddr)
-		if err != nil {
-			log.Error(err)
-			os.Exit(1)
-		}
+		if externalAddr != oldIP {
+			var message string
+			if oldIP == "" {
+				message = fmt.Sprintf("Setting %s to %s", config.Hostname, externalAddr)
+			} else {
+				message = fmt.Sprintf("Updating %s from %s to %s", config.Hostname, oldIP, externalAddr)
+			}
+			log.Info(message)
 
-		time.Sleep(300 * time.Second)
+			err = upsertARecord(svc, config.Hostname, externalAddr)
+			if err != nil {
+				log.Error(err)
+				continue
+			}
+
+			// Only change oldIP to the newly detected IP if AWS didn't error out so the if block still works during the
+			// next iteration
+			oldIP = externalAddr
+		}
 	}
 }
 

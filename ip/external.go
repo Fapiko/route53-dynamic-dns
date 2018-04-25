@@ -3,6 +3,7 @@ package ip
 import (
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 /*
@@ -20,5 +21,5 @@ func External() (string, error) {
 		return "", err
 	}
 
-	return string(ip), nil
+	return strings.TrimSpace(string(ip)), nil
 }
