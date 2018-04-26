@@ -5,7 +5,7 @@ of the machine it's running on in Route53.
 
 ## Configuration
 
-~/.route53-dynamic-dns/config.yaml
+/etc/route53-dynamic-dns/config.yaml
 ```yaml
 hostname: pc.yourdomain.com
 aws-access-key-id: XXXXXXXXX
@@ -13,5 +13,4 @@ aws-secret-access-key: XXXXXXXXX
 ```
 
 ## TODO
-  * Daemonize it
-  * Package into debian package
+  * Add license info and lint .deb release

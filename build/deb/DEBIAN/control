@@ -1,0 +1,7 @@
+Package: route53-dynamic-dns
+Version: 0.1.0
+Maintainer: Lucas Jandrew <fapiko@gmail.com>
+Architecture: amd64
+Depends:
+Description: This is a dynamic DNS client written in Go to store the external address of the machine it's running on in
+ Route53. Requires an AWS account and access keys with permissions to list zones and update/create A records.

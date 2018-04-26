@@ -2,8 +2,6 @@ package main
 
 import (
 	"io/ioutil"
-	"os"
-	"os/user"
 
 	"gopkg.in/yaml.v2"
 )
@@ -18,8 +16,7 @@ type Config struct {
 }
 
 func parseConfig() (*Config, error) {
-	usr, _ := user.Current()
-	filepath := usr.HomeDir + string(os.PathSeparator) + ".route53-dynamic-dns/config.yaml"
+	filepath := "/etc/route53-dynamic-dns/config.yaml"
 	configData, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		return nil, err
