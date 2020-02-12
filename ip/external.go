@@ -10,7 +10,7 @@ import (
 External returns the public IP address for this machine found by hitting the myexternalip service
 */
 func External() (string, error) {
-	resp, err := http.Get("http://ipv4.myexternalip.com/raw")
+	resp, err := http.Get("https://myexternalip.com/raw")
 	if err != nil {
 		return "", err
 	}

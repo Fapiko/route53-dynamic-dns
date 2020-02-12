@@ -1,0 +1,10 @@
+[Unit]
+Description=Route53 Dynamic DNS
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/route53-dynamic-dns
+Restart=always
+RestartSec=5
+StandardOutput=file:/var/log/route53-dynamic-dns/route53-dynamic-dns.log
+StandardError=file:/var/log/route53-dynamic-dns/route53-dynamic-dns.log

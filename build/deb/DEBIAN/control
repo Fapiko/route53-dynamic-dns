@@ -1,5 +1,5 @@
 Package: route53-dynamic-dns
-Version: 0.1.0
+Version: 0.1.1
 Maintainer: Lucas Jandrew <fapiko@gmail.com>
 Architecture: amd64
 Depends:
